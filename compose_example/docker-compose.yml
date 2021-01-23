@@ -21,3 +21,15 @@ services:
       - ./mysql.env
     volumes:
       - './services/web/:/usr/src/app/'
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:5.7.29
+    ports:
+      - 3306:3306
+    container_name: "mysql"
+    hostname: "mysqldbhost"
+    env_file:
+      - ./mysql.env
+    volumes:
+      - './data/mysql/:/var/lib/mysql'

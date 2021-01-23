@@ -1,15 +1,20 @@
 from flask import Flask, jsonify
 import mysql.connector
+import os
 
 
 
 app = Flask(__name__)
 
 def conn():
+
+    # pw = os.environ['HOME']
+    pw = os.environ.get('MYSQL_ROOT_PASSWORD')
+
     mydb = mysql.connector.connect(
-      host="mysqlhost",
+      host="mysqldbhost",
       user="root",
-      password="password123"
+      password=pw
     )
     return mydb
 
@@ -18,7 +23,7 @@ def conn():
 @app.route('/')
 def hello_world():
 
-    return 'Hello, Edinburgh, How is the weather today? -- I cannot wait till I visit; Hopefully this year!!!'
+    return 'Hello, Edinburgh, How is the weather today?'
 
 
 @app.route('/list_all')
