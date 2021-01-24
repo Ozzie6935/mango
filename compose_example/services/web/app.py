@@ -25,6 +25,11 @@ def hello_world():
 
     return 'Hello, Edinburgh, How is the weather today?'
 
+@app.route('/hostname')
+def hostname():
+    h = os.environ.get('HOSTNAME')
+    d = { "Hostname": h}
+    return jsonify(d)
 
 @app.route('/list_all')
 def list_all_users():

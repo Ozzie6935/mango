@@ -2,34 +2,51 @@ version: "3.9"
 
 services:
 
-  redis:
-    image: redis:alpine3.12
+  # redis:
+  #   image: redis:alpine3.12
 
   web:
     # user: 400:400
     build:
       context: ./services/web/
       dockerfile: Dockerfile
-    ports:
-      - 8080:8080
-    container_name: "web"
-    hostname: "webhost"
+    # ports:
+    #   - 8080:8080
+    expose:
+      - 8080
+    # container_name: "web"
+    # hostname: "webhost"
     # environment:
     #   fruit: "apple"
     env_file:
-      - ./web.env
-      - ./mysql.env
+      - ./env/web.env
+      - ./env/mysql.env
     volumes:
       - './services/web/:/usr/src/app/'
     depends_on:
       - mysql
   mysql:
     image: mysql:5.7.29
-    ports:
-      - 3306:3306
+    # ports:
+    #   - 3322:3306
+    expose:
+      - 3306
     container_name: "mysql"
     hostname: "mysqldbhost"
     env_file:
-      - ./mysql.env
+      - ./env/mysql.env
     volumes:
       - './data/mysql/:/var/lib/mysql'
+  nginx:
+    image: nginx:1.15.9-alpine
+    ports:
+      - 80:80
+      - 443:443
+    container_name: "nginx"
+    hostname: "mynginx"
+    volumes:
+    #  - "./html:/usr/share/nginx/html"
+      - './configs/nginx/conf.d:/etc/nginx/conf.d'
+    depends_on:
+      - web
+      - mysql
